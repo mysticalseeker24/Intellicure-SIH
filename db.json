@@ -1,0 +1,149 @@
+{
+  "hospitals": [
+    {
+      "id": "hosp_001",
+      "name": "Metropolitan General Hospital",
+      "email": "admin@metro-general.com",
+      "password": "hospital123",
+      "address": "1234 Medical Center Dr, Healthcare City, HC 12345",
+      "phone": "+1 (555) 123-4567",
+      "departments": ["Cardiology", "Neurology", "Oncology", "Emergency", "Pediatrics"],
+      "established": 1987,
+      "beds": 450,
+      "rating": 4.8
+    },
+    {
+      "id": "hosp_002", 
+      "name": "St. Mary's Medical Center",
+      "email": "contact@stmarys.com",
+      "password": "hospital456",
+      "address": "5678 Healing Way, Medford, MF 67890",
+      "phone": "+1 (555) 987-6543",
+      "departments": ["Orthopedics", "Gastroenterology", "Psychiatry", "Radiology"],
+      "established": 1952,
+      "beds": 320,
+      "rating": 4.6
+    },
+    {
+      "id": "hosp_003",
+      "name": "Regional Health System",
+      "email": "info@regional-health.com", 
+      "password": "hospital789",
+      "address": "9012 Wellness Blvd, Careville, CV 13579",
+      "phone": "+1 (555) 456-7890",
+      "departments": ["ICU", "Surgery", "Maternity", "Dermatology"],
+      "established": 1995,
+      "beds": 280,
+      "rating": 4.7
+    }
+  ],
+  "patients": [
+    {
+      "id": "pat_001",
+      "firstName": "John",
+      "lastName": "Smith",
+      "email": "john.smith@email.com",
+      "password": "patient123",
+      "dateOfBirth": "1985-06-15",
+      "phone": "+1 (555) 234-5678",
+      "address": "123 Oak Street, Anytown, AT 12345",
+      "emergencyContact": "Jane Smith - (555) 876-5432",
+      "insuranceProvider": "HealthPlus Insurance",
+      "bloodType": "A+",
+      "allergies": ["Penicillin", "Shellfish"]
+    },
+    {
+      "id": "pat_002",
+      "firstName": "Sarah",
+      "lastName": "Johnson",
+      "email": "sarah.johnson@email.com", 
+      "password": "patient456",
+      "dateOfBirth": "1992-03-22",
+      "phone": "+1 (555) 345-6789",
+      "address": "456 Pine Avenue, Somewhere, SW 67890",
+      "emergencyContact": "Mike Johnson - (555) 987-1234",
+      "insuranceProvider": "MediCare Plus",
+      "bloodType": "O-",
+      "allergies": ["Latex"]
+    },
+    {
+      "id": "pat_003",
+      "firstName": "Michael",
+      "lastName": "Davis",
+      "email": "michael.davis@email.com",
+      "password": "patient789", 
+      "dateOfBirth": "1978-11-08",
+      "phone": "+1 (555) 456-7890",
+      "address": "789 Maple Drive, Elsewhere, EW 13579",
+      "emergencyContact": "Lisa Davis - (555) 543-2109",
+      "insuranceProvider": "Universal Health",
+      "bloodType": "B+",
+      "allergies": ["Peanuts", "Dust mites"]
+    }
+  ],
+  "records": [
+    {
+      "id": "rec_001",
+      "patientId": "pat_001",
+      "hospitalId": "hosp_001",
+      "date": "2024-12-15",
+      "type": "Routine Checkup",
+      "department": "Cardiology",
+      "physician": "Dr. Emily Carter",
+      "diagnosis": "Hypertension - Stage 1",
+      "treatment": "Lifestyle modifications, ACE inhibitor prescribed",
+      "notes": "Patient reports occasional chest discomfort. BP: 142/88. Recommended dietary changes and regular exercise.",
+      "followUp": "2025-01-15",
+      "medications": ["Lisinopril 10mg daily", "Aspirin 81mg daily"],
+      "vitals": {
+        "bloodPressure": "142/88",
+        "heartRate": "78 bpm",
+        "temperature": "98.6°F",
+        "weight": "185 lbs",
+        "height": "5'10\""
+      }
+    },
+    {
+      "id": "rec_002",
+      "patientId": "pat_002", 
+      "hospitalId": "hosp_002",
+      "date": "2024-12-10",
+      "type": "Emergency Visit",
+      "department": "Emergency",
+      "physician": "Dr. James Wilson",
+      "diagnosis": "Acute Bronchitis",
+      "treatment": "Bronchodilator therapy, antibiotic course",
+      "notes": "Patient presented with productive cough, fever, and shortness of breath. Chest X-ray clear.",
+      "followUp": "2024-12-20",
+      "medications": ["Azithromycin 250mg", "Albuterol inhaler"],
+      "vitals": {
+        "bloodPressure": "118/75",
+        "heartRate": "92 bpm", 
+        "temperature": "101.2°F",
+        "weight": "135 lbs",
+        "height": "5'6\""
+      }
+    },
+    {
+      "id": "rec_003",
+      "patientId": "pat_003",
+      "hospitalId": "hosp_003",
+      "date": "2024-12-08", 
+      "type": "Specialist Consultation",
+      "department": "Orthopedics",
+      "physician": "Dr. Robert Kim",
+      "diagnosis": "Lumbar disc herniation L4-L5",
+      "treatment": "Physical therapy, pain management",
+      "notes": "MRI confirms disc herniation. Patient reports lower back pain radiating to left leg. Conservative treatment recommended.",
+      "followUp": "2025-01-08",
+      "medications": ["Ibuprofen 600mg TID", "Cyclobenzaprine 10mg HS"],
+      "vitals": {
+        "bloodPressure": "128/82",
+        "heartRate": "68 bpm",
+        "temperature": "98.4°F", 
+        "weight": "205 lbs",
+        "height": "6'1\""
+      }
+    }
+  ]
+}
