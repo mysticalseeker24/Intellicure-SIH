@@ -1,0 +1,80 @@
+icd11_code,icd11_term,icd11_description,embed_text
+8A25,Gastritis,Inflammation of the gastric mucosa,Gastritis | Inflammation of the gastric mucosa | 8A25
+ME05,Diarrhoea,Passage of loose or liquid stools,Diarrhoea | Passage of loose or liquid stools | ME05
+8A44,Malabsorption syndromes,Impaired absorption of nutrients,Malabsorption syndromes | Impaired absorption of nutrients | 8A44
+EB90,Urticaria,Allergic skin reaction,Urticaria | Allergic skin reaction | EB90
+CA23,Asthma,Chronic inflammatory airway disease,Asthma | Chronic inflammatory airway disease | CA23
+BB01,Stroke,Cerebrovascular accident,Stroke | Cerebrovascular accident | BB01
+MD80,Hiccup,Involuntary contraction of diaphragm,Hiccup | Involuntary contraction of diaphragm | MD80
+8A61,Epilepsy,Recurrent unprovoked seizures,Epilepsy | Recurrent unprovoked seizures | 8A61
+8B11,Alzheimer disease,Progressive dementia,Alzheimer disease | Progressive dementia | 8B11
+DA61,Peptic ulcer,Stomach or duodenal ulcer,Peptic ulcer | Stomach or duodenal ulcer | DA61
+8B20,Hemiplegia,Paralysis affecting one side,Hemiplegia | Paralysis affecting one side | 8B20
+5A40,Thyroid disorders,Thyroid gland dysfunction,Thyroid disorders | Thyroid gland dysfunction | 5A40
+JA80,Pre-eclampsia,Pregnancy hypertension,Pre-eclampsia | Pregnancy hypertension | JA80
+ME84.2,Low back pain,Pain in lower back region,Low back pain | Pain in lower back region | ME84.2
+ME84.1,Neck pain,Pain or stiffness in neck,Neck pain | Pain or stiffness in neck | ME84.1
+1B20,Leprosy,Chronic infectious disease,Leprosy | Chronic infectious disease | 1B20
+EA80,Atopic dermatitis,Chronic inflammatory skin disease,Atopic dermatitis | Chronic inflammatory skin disease | EA80
+1F28,Dermatophytosis,Superficial fungal infection,Dermatophytosis | Superficial fungal infection | 1F28
+NE70,Open wound,Disruption of skin integrity,Open wound | Disruption of skin integrity | NE70
+BA00,Heart diseases,Disorders of the heart,Heart diseases | Disorders of the heart | BA00
+3A10,Bleeding disorders,Impaired hemostasis,Bleeding disorders | Impaired hemostasis | 3A10
+BA00,Hypertensive diseases,Elevated arterial pressure,Hypertensive diseases | Elevated arterial pressure | BA00
+MF50,Dysuria,Painful or difficult urination,Dysuria | Painful or difficult urination | MF50
+CA40,Chronic obstructive pulmonary disease,COPD,Chronic obstructive pulmonary disease | COPD | CA40
+5A11,Type 2 diabetes,Non-insulin dependent diabetes,Type 2 diabetes | Non-insulin dependent diabetes | 5A11
+GA34,Menstrual disorders,Abnormalities of menstruation,Menstrual disorders | Abnormalities of menstruation | GA34
+NE61,Fractures,Bone breaks,Fractures | Bone breaks | NE61
+JA00,Pregnancy with abortive outcome,Termination of pregnancy,Pregnancy with abortive outcome | Termination of pregnancy | JA00
+NE80,Burns,Thermal injuries,Burns | Thermal injuries | NE80
+GA11,Endometriosis,Uterine tissue displacement,Endometriosis | Uterine tissue displacement | GA11
+5B82,Underweight,Below normal weight,Underweight | Below normal weight | 5B82
+6A20,Schizophrenia,Psychotic disorder,Schizophrenia | Psychotic disorder | 6A20
+6D72,Amnesia,Loss of memory function,Amnesia | Loss of memory function | 6D72
+6B00,Anxiety disorders,Excessive fear or anxiety,Anxiety disorders | Excessive fear or anxiety | 6B00
+FA20,Rheumatoid arthritis,Inflammatory joint disease,Rheumatoid arthritis | Inflammatory joint disease | FA20
+DA90,Liver disorders,Hepatic dysfunction,Liver disorders | Hepatic dysfunction | DA90
+CA25,Chronic respiratory diseases,Long-term airway problems,Chronic respiratory diseases | Long-term airway problems | CA25
+2A00,Malignant neoplasms,Cancerous growth,Malignant neoplasms | Cancerous growth | 2A00
+80000000000000002430288227416029335126016,Peripheral neuropathy,Nerve damage,Peripheral neuropathy | Nerve damage | 80000000000000002430288227416029335126016
+CA2Y,Respiratory mucus disorders,Excessive mucus production,Respiratory mucus disorders | Excessive mucus production | CA2Y
+3A1Y,Blood disorders,Hematological conditions,Blood disorders | Hematological conditions | 3A1Y
+6A70,Mood disorders,Depressive conditions,Mood disorders | Depressive conditions | 6A70
+1G00,Fever,Elevated body temperature,Fever | Elevated body temperature | 1G00
+3A20,Iron deficiency anemia,Lack of iron in blood,Iron deficiency anemia | Lack of iron in blood | 3A20
+9B71,Haemorrhoids,Swollen veins in the anal canal,Haemorrhoids | Swollen veins in the anal canal | 9B71
+MD12,Cough,Sudden expulsion of air from lungs,Cough | Sudden expulsion of air from lungs | MD12
+DA94,Inflammatory bowel disease,Chronic intestinal inflammation,Inflammatory bowel disease | Chronic intestinal inflammation | DA94
+CA08,Acute upper respiratory infections,Viral infection of upper airways,Acute upper respiratory infections | Viral infection of upper airways | CA08
+8A80.1,Migraine without aura,Primary headache disorder,Migraine without aura | Primary headache disorder | 8A80.1
+8A80,Primary headache disorders,Pain located in head or neck,Primary headache disorders | Pain located in head or neck | 8A80
+FA20,Rheumatoid arthritis,Chronic inflammatory joint disease,Rheumatoid arthritis | Chronic inflammatory joint disease | FA20
+FA00,Osteoarthritis,Degenerative joint disease,Osteoarthritis | Degenerative joint disease | FA00
+3A60,Sickle cell disease,Hemoglobin disorder,Sickle cell disease | Hemoglobin disorder | 3A60
+1C40,Malaria,Parasitic infection,Malaria | Parasitic infection | 1C40
+BA42,Atrial fibrillation,Irregular heart rhythm,Atrial fibrillation | Irregular heart rhythm | BA42
+MF52,Retention of urine,Inability to void urine,Retention of urine | Inability to void urine | MF52
+GC80,Urolithiasis,Formation of stones in urinary tract,Urolithiasis | Formation of stones in urinary tract | GC80
+GA22,Excessive vaginal discharge,Abnormal vaginal discharge,Excessive vaginal discharge | Abnormal vaginal discharge | GA22
+5B81,Overweight or obesity,Excess body fat,Overweight or obesity | Excess body fat | 5B81
+1A00,Cholera,Acute diarrheal infection,Cholera | Acute diarrheal infection | 1A00
+FA02,Juvenile arthritis,Childhood joint inflammation,Juvenile arthritis | Childhood joint inflammation | FA02
+ME0Y,Biliary disorders,Bile-related conditions,Biliary disorders | Bile-related conditions | ME0Y
+2B90,Benign neoplasms,Non-malignant growths,Benign neoplasms | Non-malignant growths | 2B90
+8A62,Parkinson disease,Progressive neurological disorder,Parkinson disease | Progressive neurological disorder | 8A62
+2A70,Breast cancer,Malignant breast neoplasm,Breast cancer | Malignant breast neoplasm | 2A70
+6A41,Panic disorder,Recurrent panic attacks,Panic disorder | Recurrent panic attacks | 6A41
+1D00,HIV disease,Human immunodeficiency virus,HIV disease | Human immunodeficiency virus | 1D00
+5A10,Type 1 diabetes mellitus,Metabolic disorder,Type 1 diabetes mellitus | Metabolic disorder | 5A10
+6A60,Bipolar disorder,Mood cycling disorder,Bipolar disorder | Mood cycling disorder | 6A60
+GC08,Chronic kidney disease,Progressive kidney failure,Chronic kidney disease | Progressive kidney failure | GC08
+6A71,Major depression,Severe depressive episode,Major depression | Severe depressive episode | 6A71
+1B10,Tuberculosis,Mycobacterial infection,Tuberculosis | Mycobacterial infection | 1B10
+2A60,Lung cancer,Malignant lung neoplasm,Lung cancer | Malignant lung neoplasm | 2A60
+EA85,Psoriasis,Chronic skin inflammation,Psoriasis | Chronic skin inflammation | EA85
+FB52,Osteoporosis,Bone density loss,Osteoporosis | Bone density loss | FB52
+CB41,Pneumonia,Lung infection,Pneumonia | Lung infection | CB41
+4A01,Lymphadenopathy,Enlarged lymph nodes,Lymphadenopathy | Enlarged lymph nodes | 4A01
+JA63,Gestational diabetes,Pregnancy diabetes,Gestational diabetes | Pregnancy diabetes | JA63
+BA11,Acute myocardial infarction,Heart attack,Acute myocardial infarction | Heart attack | BA11

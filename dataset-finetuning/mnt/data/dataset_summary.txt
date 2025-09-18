@@ -1,0 +1,44 @@
+NAMASTE Dataset Processing Summary
+==================================================
+Processing Date: 2025-09-18 17:34:22
+Total Pairs: 20,000
+
+Split Distribution:
+  Training:   13,860 pairs (69.3%)
+  Validation: 2,970 pairs (14.8%)
+  Test:       2,970 pairs (14.8%)
+  Holdout:    200 pairs (1.0%)
+
+Confidence Statistics:
+  Min:    0.000
+  Max:    1.000
+  Mean:   0.678
+  Median: 0.692
+  Std:    0.211
+
+Equivalence Distribution:
+  equivalent: 6,402 (32.0%)
+  broader: 5,231 (26.2%)
+  related: 5,186 (25.9%)
+  narrower: 2,385 (11.9%)
+  unmapped: 796 (4.0%)
+
+Sample NAMASTE Text:
+  indigestion | अजीर्ण | ajīrṇa | indigestion | Impaired digestion due to weakened digestive fire (agni) | dyspepsia|poor digestion...
+
+Sample ICD Text:
+  Gastritis | Inflammation of the gastric mucosa...
+
+Embedding Text Length Statistics:
+  NAMASTE - Mean: 108.7, Max: 145
+  ICD     - Mean: 43.4, Max: 69
+
+Files Generated:
+  ✅ namaste_finetune_train.tsv
+  ✅ namaste_finetune_val.tsv
+  ✅ namaste_finetune_test.tsv
+  ✅ namaste_holdout_eval.tsv
+  ✅ namaste_all_pairs.tsv
+  ✅ dataset_summary.txt
+
+Ready for EmbeddingGemma fine-tuning! 🚀
