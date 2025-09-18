@@ -1,10 +1,24 @@
-import { Heart, LogOut } from "lucide-react";
+import { Heart, LogOut, Menu, X } from "lucide-react";
 
-export const Header: React.FC<{ user: any; onLogout: () => void }> = ({ user, onLogout }) => (
+interface HeaderProps {
+  user: any;
+  onLogout: () => void;
+  onToggleSidebar: () => void;
+  sidebarOpen: boolean;
+}
+
+export const Header: React.FC<HeaderProps> = ({ user, onLogout, onToggleSidebar, sidebarOpen }) => (
   <header className="bg-white shadow-sm border-b">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="flex justify-between items-center h-16">
-        <div className="flex items-center">
+        <div className="flex items-center space-x-3">
+          <button
+            className="md:hidden p-2 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onClick={onToggleSidebar}
+            aria-label={sidebarOpen ? "Close sidebar" : "Open sidebar"}
+          >
+            {sidebarOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
           <div className="flex items-center space-x-2">
             <Heart className="h-8 w-8 text-green-600" />
             <span className="text-xl font-bold text-gray-900">IntelliCure</span>

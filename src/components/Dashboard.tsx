@@ -89,7 +89,7 @@ export const Dashboard: React.FC = () => {
       <div className="bg-white p-6 rounded-lg shadow-sm">
         <h3 className="text-lg font-bold mb-4">Integration Status</h3>
         <div className="space-y-4">
-          <div className="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+          <div className="flex justify-between-center p-3 bg-green-50 rounded-lg">
             <div className="flex items-center space-x-3">
               <div className="w-3 h-3 bg-green-500 rounded-full"></div>
               <span>ABHA ID Service</span>

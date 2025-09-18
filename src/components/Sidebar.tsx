@@ -1,8 +1,15 @@
 import { BookOpen, Home, Pill, Settings, Users } from "lucide-react";
 
-export const Sidebar: React.FC<{ activeTab: string; setActiveTab: (tab: string) => void }> = ({ 
-  activeTab, 
-  setActiveTab 
+interface SidebarProps {
+  activeTab: string;
+  setActiveTab: (tab: string) => void;
+  className?: string;
+}
+
+export const Sidebar: React.FC<SidebarProps> = ({
+  activeTab,
+  setActiveTab,
+  className = '',
 }) => {
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: Home },
@@ -13,7 +20,7 @@ export const Sidebar: React.FC<{ activeTab: string; setActiveTab: (tab: string) 
   ];
 
   return (
-    <aside className="w-64 bg-white shadow-sm min-h-screen border-r">
+    <aside className={`w-64 min-h-screen bg-white shadow-sm  ${className}`}>
       <nav className="mt-8">
         <ul className="space-y-2 px-4">
           {menuItems.map((item) => {
