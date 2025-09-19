@@ -1,17 +1,31 @@
 import { useState } from "react";
 import type { Prescription } from "../types/types";
 import { Pill } from "lucide-react";
+import { postJSON } from "../api/ApiClient";
+import { AutocompleteInput } from "./AutocompleteInput";
 
 export const PrescriptionPage: React.FC = () => {
   const [symptoms, setSymptoms] = useState('');
   const [prescriptions, setPrescriptions] = useState<Prescription[]>([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleGeneratePrescription = async () => {
+    if (!symptoms.trim()) {
+      setError("Please enter symptoms to generate prescriptions");
+      return;
+    }
+
     setLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      setPrescriptions([
+    setError(null);
+    
+    try {
+      // First get ICD codes for the symptoms
+      const icdResponse = await postJSON("/api/search/icd", { text: symptoms, k: 3 });
+      
+      // Generate prescriptions based on the diagnosis
+      // For now, we'll use the existing mock data but structure it based on the ICD response
+      const mockPrescriptions: Prescription[] = [
         {
           medicine: 'Triphala Churna',
           dosage: '3g',
@@ -33,9 +47,30 @@ export const PrescriptionPage: React.FC = () => {
           duration: '2 weeks',
           type: 'modern'
         }
+      ];
+      
+      setPrescriptions(mockPrescriptions);
+      
+      // Log the ICD response for debugging
+      console.log("ICD codes found:", icdResponse);
+      
+    } catch (err) {
+      console.error("Failed to generate prescriptions", err);
+      setError("Failed to generate prescriptions. Please try again.");
+      
+      // Fallback to mock data on error
+      setPrescriptions([
+        {
+          medicine: 'Triphala Churna',
+          dosage: '3g',
+          frequency: 'Twice daily',
+          duration: '15 days',
+          type: 'ayush'
+        }
       ]);
+    } finally {
       setLoading(false);
-    }, 1500);
+    }
   };
 
   return (
@@ -43,24 +78,30 @@ export const PrescriptionPage: React.FC = () => {
       <div className="bg-white p-6 rounded-lg shadow-sm">
         <h2 className="text-2xl font-bold mb-6">Prescription Assistant</h2>
         
+        {error && (
+          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
+            <p className="text-red-700 text-sm">{error}</p>
+          </div>
+        )}
+        
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Enter Patient Symptoms
             </label>
-            <textarea
+            <AutocompleteInput
               value={symptoms}
-              onChange={(e) => setSymptoms(e.target.value)}
+              onChange={setSymptoms}
               placeholder="Describe patient symptoms for personalized prescription recommendations..."
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
               rows={4}
+              disabled={loading}
             />
           </div>
           
           <button
             onClick={handleGeneratePrescription}
-            disabled={loading}
-            className="bg-green-600 hover:cursor-pointer text-white px-6 py-2 rounded-md hover:bg-green-700 transition-colors flex items-center space-x-2"
+            disabled={loading || !symptoms.trim()}
+            className="bg-green-600 hover:cursor-pointer text-white px-6 py-2 rounded-md hover:bg-green-700 transition-colors flex items-center space-x-2 disabled:bg-gray-400 disabled:cursor-not-allowed"
           >
             {loading ? (
               <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />

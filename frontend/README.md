@@ -1,6 +1,6 @@
-# React + TypeScript + Vite
+# IntelliCure Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the frontend application for IntelliCure - an intelligent healthcare solution that bridges Traditional Indian Medicine (AYUSH) with International Disease Classification standards.
 
 Currently, two official plugins are available:
 

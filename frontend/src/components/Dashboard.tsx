@@ -1,6 +1,8 @@
 import { BookOpen, Brain, Hospital, Pill, Plus, Search, Users } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export const Dashboard: React.FC = () => {
+  const navigate = useNavigate();
   return (
     <div className="space-y-6">
       <div className="grid md:grid-cols-3 gap-6">
@@ -66,19 +68,31 @@ export const Dashboard: React.FC = () => {
         <div className="bg-white p-6 rounded-lg shadow-sm">
           <h3 className="text-lg font-bold mb-4">Quick Actions</h3>
           <div className="grid grid-cols-2 gap-3">
-            <button className="p-3 border border-gray-200 rounded-lg hover:bg-gray-50 text-left">
+            <button 
+              onClick={() => navigate('/patient-records')}
+              className="p-3 border border-gray-200 rounded-lg hover:bg-gray-50 text-left transition-colors"
+            >
               <Search className="h-5 w-5 text-green-600 mb-2" />
               <p className="text-sm font-medium">Search Patient</p>
             </button>
-            <button className="p-3 border border-gray-200 rounded-lg hover:bg-gray-50 text-left">
+            <button 
+              onClick={() => navigate('/patient-records')}
+              className="p-3 border border-gray-200 rounded-lg hover:bg-gray-50 text-left transition-colors"
+            >
               <Plus className="h-5 w-5 text-green-600 mb-2" />
               <p className="text-sm font-medium">Add Record</p>
             </button>
-            <button className="p-3 border border-gray-200 rounded-lg hover:bg-gray-50 text-left">
+            <button 
+              onClick={() => navigate('/dual-codes')}
+              className="p-3 border border-gray-200 rounded-lg hover:bg-gray-50 text-left transition-colors"
+            >
               <Brain className="h-5 w-5 text-green-600 mb-2" />
               <p className="text-sm font-medium">Generate Codes</p>
             </button>
-            <button className="p-3 border border-gray-200 rounded-lg hover:bg-gray-50 text-left">
+            <button 
+              onClick={() => navigate('/prescriptions')}
+              className="p-3 border border-gray-200 rounded-lg hover:bg-gray-50 text-left transition-colors"
+            >
               <Pill className="h-5 w-5 text-green-600 mb-2" />
               <p className="text-sm font-medium">Create Prescription</p>
             </button>

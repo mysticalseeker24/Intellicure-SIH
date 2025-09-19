@@ -1,4 +1,4 @@
-# Frontend-Backend Integration Guide
+# IntelliCure - Frontend-Backend Integration Guide
 
 ## 🚀 Quick Start
 

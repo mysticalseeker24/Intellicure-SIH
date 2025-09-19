@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { DualCode } from "../types/types";
 import { Brain, Mic, Volume2 } from "lucide-react";
 import { postJSON, postAudio, postTTS, playAudioFromBase64 } from "../api/ApiClient";
+import { AutocompleteInput } from "./AutocompleteInput";
 
 export const DualCodingPage: React.FC = () => {
   const [symptoms, setSymptoms] = useState('');
@@ -171,17 +172,18 @@ export const DualCodingPage: React.FC = () => {
               Enter Symptoms or Diagnosis
             </label>
             <div className="relative">
-              <textarea
+              <AutocompleteInput
                 value={symptoms}
-                onChange={(e) => setSymptoms(e.target.value)}
+                onChange={setSymptoms}
                 placeholder="Describe patient symptoms, condition, or traditional diagnosis..."
-                className="w-full px-3 py-2 pr-20 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="pr-20"
                 rows={4}
+                disabled={loading}
               />
               <div className="absolute bottom-2 right-2 flex space-x-1">
                 <button
                   onClick={handleVoiceInput}
-                  disabled={recording}
+                  disabled={recording || loading}
                   className={`p-2 rounded-md transition-colors ${
                     recording 
                       ? 'bg-red-100 text-red-600' 
@@ -193,7 +195,7 @@ export const DualCodingPage: React.FC = () => {
                 </button>
                 <button
                   onClick={handleVoiceOutput}
-                  disabled={audioEnabled}
+                  disabled={audioEnabled || loading}
                   className={`p-2 rounded-md transition-colors ${
                     audioEnabled 
                       ? 'bg-blue-100 text-blue-600' 

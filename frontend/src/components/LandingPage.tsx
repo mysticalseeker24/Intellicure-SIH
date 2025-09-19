@@ -7,7 +7,7 @@ export const LandingPage: React.FC<{ onGetStarted: () => void }> = ({ onGetStart
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <Heart className="h-8 w-8 text-green-600" />
-            <span className="text-xl font-bold text-gray-900">AYUSH Bridge</span>
+            <span className="text-xl font-bold text-gray-900">IntelliCure</span>
           </div>
           <button
             onClick={onGetStarted}
@@ -21,11 +21,11 @@ export const LandingPage: React.FC<{ onGetStarted: () => void }> = ({ onGetStart
       <main className="py-12">
         <div className="text-center mb-16">
           <h1 className="text-5xl font-bold text-gray-900 mb-6">
-            Bridging Traditional & Modern Medicine
+            Intelligent Healthcare Solutions
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
             Seamlessly integrate AYUSH (Ayurveda, Yoga, Unani, Siddha, Homeopathy) 
-            with biomedicine using dual coding standards for comprehensive healthcare.
+            with biomedicine using AI-powered dual coding standards for comprehensive healthcare.
           </p>
           <button
             onClick={onGetStarted}
@@ -38,10 +38,10 @@ export const LandingPage: React.FC<{ onGetStarted: () => void }> = ({ onGetStart
         <div className="grid md:grid-cols-3 gap-8 mb-16">
           <div className="bg-white p-6 rounded-lg shadow-sm">
             <Brain className="h-12 w-12 text-green-600 mb-4" />
-            <h3 className="text-xl font-semibold mb-3">AI-Powered Mapping</h3>
+            <h3 className="text-xl font-semibold mb-3">Intelligent AI Mapping</h3>
             <p className="text-gray-600">
               Advanced AI maps AYUSH diagnoses to ICD-11 codes automatically, 
-              ensuring accurate dual coding.
+              ensuring accurate dual coding with intelligent suggestions.
             </p>
           </div>
           <div className="bg-white p-6 rounded-lg shadow-sm">
@@ -54,10 +54,10 @@ export const LandingPage: React.FC<{ onGetStarted: () => void }> = ({ onGetStart
           </div>
           <div className="bg-white p-6 rounded-lg shadow-sm">
             <Zap className="h-12 w-12 text-green-600 mb-4" />
-            <h3 className="text-xl font-semibold mb-3">Offline First</h3>
+            <h3 className="text-xl font-semibold mb-3">Smart & Efficient</h3>
             <p className="text-gray-600">
-              Works in rural areas with poor connectivity, syncing when 
-              connection is restored.
+              Intelligent offline-first design that works in rural areas with poor connectivity, 
+              syncing seamlessly when connection is restored.
             </p>
           </div>
         </div>

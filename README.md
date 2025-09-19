@@ -1,6 +1,6 @@
-# NAMASTE ↔ ICD-11 Lightweight FHIR Terminology Micro-service
+# IntelliCure - NAMASTE ↔ ICD-11 Lightweight FHIR Terminology Micro-service
 
-**A comprehensive medical terminology translation system bridging Traditional Indian Medicine (AYUSH) with International Disease Classification standards**
+**IntelliCure - A comprehensive intelligent medical terminology translation system bridging Traditional Indian Medicine (AYUSH) with International Disease Classification standards**
 
 ![Project Status](https://img.shields.io/badge/Status-Complete-green)
 ![Backend](https://img.shields.io/badge/Backend-FastAPI-blue)

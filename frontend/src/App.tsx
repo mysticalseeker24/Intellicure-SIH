@@ -2,6 +2,9 @@ import { useEffect, useState, useCallback } from "react";
 import { Dashboard } from "./components/Dashboard";
 import { Header } from "./components/Header";
 import { Sidebar } from "./components/Sidebar";
+import { PatientSidebar } from "./components/PatientSidebar";
+import { PatientDashboard } from "./components/PatientDashboard";
+import { PatientProfile } from "./components/PatientProfile";
 import { LoginPage } from "./components/Login";
 import { LandingPage } from "./components/LandingPage";
 import { PrescriptionPage } from "./components/Prescription";
@@ -26,10 +29,12 @@ const MainApp: React.FC = () => {
     const token = getAuthToken();
     if (token) {
       // If token exists, set a default user (you could fetch user profile here)
+      // For now, we'll set a default doctor user, but in real app, fetch from backend
       setUser({
         name: 'Dr. Amit Patel',
         email: 'doctor@example.com',
-        role: 'doctor'
+        role: 'doctor',
+        user_id: 'demo_doctor'
       });
     }
     
@@ -103,22 +108,38 @@ const MainApp: React.FC = () => {
                   <RouterBasedSidebar 
                     isOpen={sidebarOpen} 
                     onClose={closeSidebar}
+                    user={user}
                   />
                   
                   <main className={`flex-1 p-6 transition-all duration-300 ${
                     sidebarOpen ? 'md:ml-0' : ''
                   }`}>
                     <Routes>
-                      <Route path="/dashboard" element={<Dashboard />} />
-                      <Route path="/patient-records" element={<PatientRecordsPage />} />
-                      <Route path="/dual-codes" element={<DualCodingPage />} />
-                      <Route path="/prescriptions" element={<PrescriptionPage />} />
-                      <Route path="/settings" element={
-                        <div className="bg-white p-6 rounded-lg shadow-sm">
-                          <h2 className="text-2xl font-bold">Settings</h2>
-                          <p className="text-gray-600 mt-2">Settings page coming soon...</p>
-                        </div>
-                      } />
+                      {/* Role-based routing */}
+                      {user?.role === 'patient' ? (
+                        // Patient routes
+                        <>
+                          <Route path="/dashboard" element={<PatientDashboard />} />
+                          <Route path="/diagnosis" element={<DualCodingPage />} />
+                          <Route path="/profile" element={<PatientProfile />} />
+                          <Route path="/" element={<PatientDashboard />} />
+                        </>
+                      ) : (
+                        // Hospital/Doctor routes
+                        <>
+                          <Route path="/dashboard" element={<Dashboard />} />
+                          <Route path="/patient-records" element={<PatientRecordsPage />} />
+                          <Route path="/dual-codes" element={<DualCodingPage />} />
+                          <Route path="/prescriptions" element={<PrescriptionPage />} />
+                          <Route path="/settings" element={
+                            <div className="bg-white p-6 rounded-lg shadow-sm">
+                              <h2 className="text-2xl font-bold">Settings</h2>
+                              <p className="text-gray-600 mt-2">Settings page coming soon...</p>
+                            </div>
+                          } />
+                          <Route path="/" element={<Dashboard />} />
+                        </>
+                      )}
                     </Routes>
                   </main>
                 </div>
@@ -135,21 +156,35 @@ const MainApp: React.FC = () => {
 interface RouterBasedSidebarProps {
   isOpen: boolean;
   onClose: () => void;
+  user: any;
 }
 
-const RouterBasedSidebar: React.FC<RouterBasedSidebarProps> = ({ isOpen, onClose }) => {
+const RouterBasedSidebar: React.FC<RouterBasedSidebarProps> = ({ isOpen, onClose, user }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const getActiveTabFromPath = useCallback((path: string) => {
-    if (path.includes('patient-records')) return 'patient-records';
-    if (path.includes('dual-codes')) return 'dual-codes';
-    if (path.includes('prescriptions')) return 'prescriptions';
-    if (path.includes('settings')) return 'settings';
-    return 'dashboard';
-  }, []);
+  // Get user role from user prop
+  const userRole = user?.role || 'doctor';
 
-  const tabToRoute: Record<string, string> = {
+  const getActiveTabFromPath = useCallback((path: string) => {
+    if (userRole === 'patient') {
+      if (path.includes('diagnosis')) return 'diagnosis';
+      if (path.includes('profile')) return 'profile';
+      return 'dashboard';
+    } else {
+      if (path.includes('patient-records')) return 'patient-records';
+      if (path.includes('dual-codes')) return 'dual-codes';
+      if (path.includes('prescriptions')) return 'prescriptions';
+      if (path.includes('settings')) return 'settings';
+      return 'dashboard';
+    }
+  }, [userRole]);
+
+  const tabToRoute: Record<string, string> = userRole === 'patient' ? {
+    'dashboard': '/dashboard',
+    'diagnosis': '/diagnosis',
+    'profile': '/profile',
+  } : {
     'dashboard': '/dashboard',
     'patient-records': '/patient-records',
     'dual-codes': '/dual-codes',
@@ -199,8 +234,12 @@ const RouterBasedSidebar: React.FC<RouterBasedSidebarProps> = ({ isOpen, onClose
           </button>
         </div>
         
-        {/* Sidebar content */}
-        <Sidebar activeTab={activeTab} setActiveTab={handleTabClick} />
+        {/* Sidebar content - role-based */}
+        {userRole === 'patient' ? (
+          <PatientSidebar activeTab={activeTab} setActiveTab={handleTabClick} />
+        ) : (
+          <Sidebar activeTab={activeTab} setActiveTab={handleTabClick} />
+        )}
       </div>
     </>
   );

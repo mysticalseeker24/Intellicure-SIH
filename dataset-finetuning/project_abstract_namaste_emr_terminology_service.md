@@ -2,6 +2,8 @@
 
 **Project title:** NAMASTE↔ICD-11 Lightweight FHIR Terminology Micro‑service with EmbeddingGemma reasoning, FAISS search, and ElevenLabs TTS/STT for prototype EMR integration
 
+**Project Name** Intellicure 
+
 **Prepared for:** Smart India Hackathon / Prototype Development
 
 **Date:** 2025-09-18

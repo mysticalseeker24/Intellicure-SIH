@@ -18,7 +18,7 @@ from fastapi.middleware.cors import CORSMiddleware
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("backend")
 
-app = FastAPI(title="NAMASTE Terminology Microservice")
+app = FastAPI(title="IntelliCure - NAMASTE Terminology Microservice")
 
 # CORS - allow frontend dev origin(s)
 app.add_middleware(
@@ -55,13 +55,35 @@ def status():
         "time": time.time()
     }
 
-# Simple login stub for prototype (returns fake JWT payload)
+# Enhanced login endpoint with role support
 @app.post("/api/login")
 def login(user: Dict[str, str]):
-    # Prototype: accept any username/password and return a fake token
+    # Prototype: accept any username/password and return a fake token with role
     username = user.get("username", "test")
+    password = user.get("password", "")
+    role = user.get("role", "doctor")  # Default to doctor for backward compatibility
+    
+    # Mock user validation - in real implementation, validate against database
+    # For prototype, determine role based on username patterns or explicit role selection
+    if role == "patient" or username.endswith("@patient.com"):
+        user_role = "patient"
+        user_name = f"Patient {username.split('@')[0] if '@' in username else username}"
+    elif role == "doctor" or username.endswith("@hospital.com"):
+        user_role = "doctor" 
+        user_name = f"Dr. {username.split('@')[0] if '@' in username else username}"
+    else:
+        user_role = "doctor"  # Default fallback
+        user_name = f"Dr. {username.split('@')[0] if '@' in username else username}"
+    
     token = f"demo-token-for-{username}"
-    return {"access_token": token, "token_type": "bearer", "username": username}
+    return {
+        "access_token": token, 
+        "token_type": "bearer", 
+        "username": username,
+        "role": user_role,
+        "name": user_name,
+        "user_id": f"user_{username.replace('@', '_').replace('.', '_')}"
+    }
 
 # STT endpoint - accepts audio, returns transcript (uses ElevenLabs)
 @app.post("/api/stt")
