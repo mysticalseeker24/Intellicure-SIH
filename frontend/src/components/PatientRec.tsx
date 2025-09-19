@@ -1,17 +1,77 @@
 import { Download, Eye, Pill, Search } from "lucide-react";
 import { useState } from "react";
 import { sampleHealthRecords, samplePatients, type HealthRecord, type Patient } from "../types/types";
+import { getJSON } from "../api/ApiClient";
 
 export const PatientRecordsPage: React.FC = () => {
   const [searchAbha, setSearchAbha] = useState('');
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
   const [healthRecords, setHealthRecords] = useState<HealthRecord[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSearch = () => {
-    const patient = samplePatients.find(p => p.abhaId === searchAbha);
-    if (patient) {
-      setSelectedPatient(patient);
-      setHealthRecords(sampleHealthRecords);
+  const handleSearch = async () => {
+    if (!searchAbha.trim()) {
+      setError("Please enter an ABHA ID");
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+    
+    try {
+      // Fetch patient info
+      const patient = await getJSON(`/api/patient/${encodeURIComponent(searchAbha)}`);
+      
+      // Map backend response to frontend Patient type
+      const mappedPatient: Patient = {
+        id: patient.id || patient.abha_id || searchAbha,
+        abhaId: patient.abha_id || searchAbha,
+        name: patient.name || "Unknown",
+        age: patient.age || 0,
+        gender: patient.gender || "Unknown",
+        phone: patient.phone || "N/A",
+        lastVisit: patient.last_visit || patient.lastVisit || "N/A"
+      };
+      
+      setSelectedPatient(mappedPatient);
+      
+      // Fetch patient history
+      try {
+        const history = await getJSON(`/api/patient/${encodeURIComponent(searchAbha)}/history`);
+        
+        // Map backend history to frontend HealthRecord type
+        const mappedRecords: HealthRecord[] = (history.history || []).map((record: any) => ({
+          id: record.id || record.patient_reference || "",
+          date: record.created_at || record.date || new Date().toISOString(),
+          hospital: record.hospital || "Unknown Hospital",
+          doctor: record.doctor || "Unknown Doctor",
+          namasteCode: record.namaste_code || "",
+          namasteDescription: record.namaste_display || record.namaste_description || "",
+          icdCode: record.icd_code || "",
+          icdDescription: record.icd_display || record.icd_description || "",
+          prescription: record.prescription || [],
+          vitals: record.vitals || {
+            bp: "N/A",
+            pulse: "N/A", 
+            temp: "N/A",
+            weight: "N/A"
+          }
+        }));
+        
+        setHealthRecords(mappedRecords);
+      } catch (historyError) {
+        console.warn("Could not fetch patient history:", historyError);
+        setHealthRecords([]);
+      }
+      
+    } catch (err) {
+      console.error("Patient lookup failed", err);
+      setError("Patient not found. Please check the ABHA ID and try again.");
+      setSelectedPatient(null);
+      setHealthRecords([]);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -19,6 +79,12 @@ export const PatientRecordsPage: React.FC = () => {
     <div className="space-y-6">
       <div className="bg-white p-6 rounded-lg shadow-sm">
         <h2 className="text-2xl font-bold mb-6">Patient Records</h2>
+        
+        {error && (
+          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
+            <p className="text-red-700 text-sm">{error}</p>
+          </div>
+        )}
         
         <div className="flex space-x-4 mb-6">
           <div className="flex-1">
@@ -31,15 +97,21 @@ export const PatientRecordsPage: React.FC = () => {
               onChange={(e) => setSearchAbha(e.target.value)}
               placeholder="12-3456-7890-1234"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+              disabled={loading}
             />
           </div>
           <div className="flex items-end">
             <button
               onClick={handleSearch}
-              className="bg-green-600 hover:cursor-pointer text-white px-6 py-2 rounded-md hover:bg-green-700 transition-colors flex items-center space-x-2"
+              disabled={loading || !searchAbha.trim()}
+              className="bg-green-600 hover:cursor-pointer text-white px-6 py-2 rounded-md hover:bg-green-700 transition-colors flex items-center space-x-2 disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
-              <Search className="h-4 w-4" />
-              <span>Search</span>
+              {loading ? (
+                <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />
+              ) : (
+                <Search className="h-4 w-4" />
+              )}
+              <span>{loading ? 'Searching...' : 'Search'}</span>
             </button>
           </div>
         </div>

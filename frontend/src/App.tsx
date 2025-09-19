@@ -8,6 +8,7 @@ import { PrescriptionPage } from "./components/Prescription";
 import { DualCodingPage } from "./components/Dualcode";
 import { PatientRecordsPage } from "./components/PatientRec";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { getAuthToken } from "./api/ApiClient";
 
 // Wrapper for LandingPage to use navigation
 const LandingPageWithNav = () => {
@@ -21,6 +22,17 @@ const MainApp: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Check for existing authentication token
+    const token = getAuthToken();
+    if (token) {
+      // If token exists, set a default user (you could fetch user profile here)
+      setUser({
+        name: 'Dr. Amit Patel',
+        email: 'doctor@example.com',
+        role: 'doctor'
+      });
+    }
+    
     // Set initial route based on current path
     const path = window.location.pathname;
     if (path === '/' || path === '') {
@@ -55,6 +67,8 @@ const MainApp: React.FC = () => {
   }, [navigate]);
 
   const handleLogout = useCallback(() => {
+    // Clear authentication token
+    localStorage.removeItem("access_token");
     setUser(null);
     setSidebarOpen(false);
     navigate("/login");

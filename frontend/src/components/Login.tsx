@@ -1,8 +1,11 @@
 import { Heart } from "lucide-react";
 import { useState } from "react";
+import { postJSON } from "../api/ApiClient";
 
 export const LoginPage: React.FC<{ onLogin: (user: any) => void }> = ({ onLogin }) => {
   const [isLogin, setIsLogin] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -10,14 +13,37 @@ export const LoginPage: React.FC<{ onLogin: (user: any) => void }> = ({ onLogin 
     role: 'doctor'
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate login
-    onLogin({
-      name: formData.name || 'Dr. Amit Patel',
-      email: formData.email,
-      role: formData.role
-    });
+    setLoading(true);
+    setError(null);
+    
+    try {
+      if (isLogin) {
+        // Login flow
+        const resp = await postJSON("/api/login", { 
+          username: formData.email, // Using email as username for backend compatibility
+          password: formData.password 
+        });
+        
+        // Store token
+        localStorage.setItem("access_token", resp.access_token || resp.token || "demo-token");
+        
+        onLogin({ 
+          name: resp.username || formData.name || 'Dr. Amit Patel',
+          email: formData.email,
+          role: formData.role
+        });
+      } else {
+        // Registration flow (mock for now)
+        setError("Registration not implemented yet. Please use login.");
+      }
+    } catch (err) {
+      console.error("Login failed", err);
+      setError("Login failed. Please check your credentials and try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -28,6 +54,12 @@ export const LoginPage: React.FC<{ onLogin: (user: any) => void }> = ({ onLogin 
           <h1 className="text-2xl font-bold text-gray-900">AYUSH Bridge</h1>
           <p className="text-gray-600 mt-2">Integrating Traditional & Modern Medicine</p>
         </div>
+
+        {error && (
+          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
+            <p className="text-red-700 text-sm">{error}</p>
+          </div>
+        )}
 
         {/* <div className="flex mb-6">
           <button
@@ -103,9 +135,13 @@ export const LoginPage: React.FC<{ onLogin: (user: any) => void }> = ({ onLogin 
             : <span>Already a User? <a onClick={() => setIsLogin(true)} className="hover:cursor-pointer text-green-600">Login</a></span>}</div>
           <button
             type="submit"
-            className="w-full hover:cursor-pointer bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition-colors"
+            disabled={loading}
+            className="w-full hover:cursor-pointer bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
           >
-            {isLogin ? 'Login' : 'Register'}
+            {loading ? (
+              <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />
+            ) : null}
+            <span>{loading ? 'Signing in...' : (isLogin ? 'Login' : 'Register')}</span>
           </button>
         </form>
       </div>

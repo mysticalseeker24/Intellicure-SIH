@@ -1,34 +1,157 @@
 import { useState } from "react";
 import type { DualCode } from "../types/types";
-import { Brain } from "lucide-react";
+import { Brain, Mic, Volume2 } from "lucide-react";
+import { postJSON, postAudio, postTTS, playAudioFromBase64 } from "../api/ApiClient";
 
 export const DualCodingPage: React.FC = () => {
   const [symptoms, setSymptoms] = useState('');
   const [dualCodes, setDualCodes] = useState<DualCode[]>([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [recording, setRecording] = useState(false);
+  const [audioEnabled, setAudioEnabled] = useState(false);
 
   const handleSearch = async () => {
+    if (!symptoms.trim()) {
+      setError("Please enter symptoms or diagnosis");
+      return;
+    }
+
     setLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      setDualCodes([
-        {
-          namasteCode: 'AY-089',
-          namasteDescription: 'Vata-Pitta Dosha Imbalance with Digestive Symptoms',
-          icdCode: 'K30',
-          icdDescription: 'Functional dyspepsia',
-          confidence: 0.92
-        },
-        {
-          namasteCode: 'SI-124',
-          namasteDescription: 'Agni Mandya (Digestive Fire Imbalance)',
-          icdCode: 'K59.0',
-          icdDescription: 'Constipation',
-          confidence: 0.87
-        }
-      ]);
+    setError(null);
+    try {
+      const resp = await postJSON("/api/search/icd", { text: symptoms, k: 5 });
+      
+      // Map server candidates to DualCode type
+      const codes = (resp.candidates || []).map((c: any) => ({
+        namasteCode: c.namaste_code || c.namaste?.code || "",
+        namasteDescription: c.namaste_term || c.namaste?.display || "",
+        icdCode: c.icd_code || c.icd?.code || c.icd_term || "",
+        icdDescription: c.icd_description || c.icd?.description || "",
+        confidence: c.score ?? c.confidence ?? 0
+      }));
+      
+      setDualCodes(codes);
+    } catch (err) {
+      console.error("Search failed", err);
+      setError("Search failed. Please try again.");
+      setDualCodes([]);
+    } finally {
       setLoading(false);
-    }, 1500);
+    }
+  };
+
+  const handleVoiceInput = async () => {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      setError("Voice input not supported in this browser");
+      return;
+    }
+
+    setRecording(true);
+    setError(null);
+    
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream);
+      const chunks: BlobPart[] = [];
+
+      mediaRecorder.ondataavailable = (event) => {
+        chunks.push(event.data);
+      };
+
+      mediaRecorder.onstop = async () => {
+        stream.getTracks().forEach(track => track.stop());
+        const audioBlob = new Blob(chunks, { type: 'audio/wav' });
+        
+        try {
+          const result = await postAudio(audioBlob as any);
+          setSymptoms(result.transcript);
+          setRecording(false);
+        } catch (err) {
+          console.error("Speech-to-text failed", err);
+          setError("Voice input failed. Please try typing instead.");
+          setRecording(false);
+        }
+      };
+
+      mediaRecorder.start();
+      
+      // Stop recording after 5 seconds
+      setTimeout(() => {
+        if (mediaRecorder.state === 'recording') {
+          mediaRecorder.stop();
+        }
+      }, 5000);
+      
+    } catch (err) {
+      console.error("Microphone access failed", err);
+      setError("Microphone access denied. Please enable microphone permissions.");
+      setRecording(false);
+    }
+  };
+
+  const handleVoiceOutput = async () => {
+    if (!symptoms.trim()) {
+      setError("No text to convert to speech");
+      return;
+    }
+
+    setAudioEnabled(true);
+    try {
+      const result = await postTTS(symptoms);
+      playAudioFromBase64(result.audio_base64);
+    } catch (err) {
+      console.error("Text-to-speech failed", err);
+      setError("Voice output failed. Please try again.");
+    } finally {
+      setAudioEnabled(false);
+    }
+  };
+
+  const saveMapping = async (namasteCode: string, namasteDisplay: string, icdCode: string, icdDisplay: string, abhaId: string = "ABHA-0001") => {
+    const bundle = {
+      resourceType: "Bundle",
+      type: "transaction",
+      entry: [
+        {
+          resource: {
+            resourceType: "Condition",
+            clinicalStatus: { 
+              coding: [{ 
+                system: "http://terminology.hl7.org/CodeSystem/condition-clinical", 
+                code: "active" 
+              }] 
+            },
+            code: {
+              coding: [
+                { 
+                  system: "https://example.org/fhir/CodeSystem/namaste", 
+                  code: namasteCode, 
+                  display: namasteDisplay 
+                },
+                { 
+                  system: "https://id.who.int/icd/entity", 
+                  code: icdCode, 
+                  display: icdDisplay 
+                }
+              ]
+            },
+            subject: { reference: `Patient/${abhaId}` }
+          },
+          request: { method: "POST", url: "Condition" }
+        }
+      ]
+    };
+    
+    try {
+      const result = await postJSON("/fhir/bundle/ingest", bundle);
+      console.log("Saved mapping", result);
+      setError(null);
+      // Optionally show success message or update UI
+    } catch (e) {
+      console.error("Save mapping failed", e);
+      setError("Failed to save mapping. Please try again.");
+    }
   };
 
   return (
@@ -36,29 +159,63 @@ export const DualCodingPage: React.FC = () => {
       <div className="bg-white p-6 rounded-lg shadow-sm">
         <h2 className="text-2xl font-bold mb-6">Dual Coding Assistant</h2>
         
+        {error && (
+          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
+            <p className="text-red-700 text-sm">{error}</p>
+          </div>
+        )}
+        
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Enter Symptoms or Diagnosis
             </label>
-            <textarea
-              value={symptoms}
-              onChange={(e) => setSymptoms(e.target.value)}
-              placeholder="Describe patient symptoms, condition, or traditional diagnosis..."
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-              rows={4}
-            />
+            <div className="relative">
+              <textarea
+                value={symptoms}
+                onChange={(e) => setSymptoms(e.target.value)}
+                placeholder="Describe patient symptoms, condition, or traditional diagnosis..."
+                className="w-full px-3 py-2 pr-20 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                rows={4}
+              />
+              <div className="absolute bottom-2 right-2 flex space-x-1">
+                <button
+                  onClick={handleVoiceInput}
+                  disabled={recording}
+                  className={`p-2 rounded-md transition-colors ${
+                    recording 
+                      ? 'bg-red-100 text-red-600' 
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
+                  title="Voice Input"
+                >
+                  <Mic className="h-4 w-4" />
+                </button>
+                <button
+                  onClick={handleVoiceOutput}
+                  disabled={audioEnabled}
+                  className={`p-2 rounded-md transition-colors ${
+                    audioEnabled 
+                      ? 'bg-blue-100 text-blue-600' 
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
+                  title="Voice Output"
+                >
+                  <Volume2 className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
           </div>
           
           <button
             onClick={handleSearch}
-            disabled={loading}
-            className="bg-green-600 hover:cursor-pointer text-white px-6 py-2 rounded-md hover:bg-green-700 transition-colors flex items-center space-x-2"
+            disabled={loading || !symptoms.trim()}
+            className="bg-green-600 hover:cursor-pointer text-white px-6 py-2 rounded-md hover:bg-green-700 transition-colors flex items-center space-x-2 disabled:bg-gray-400 disabled:cursor-not-allowed"
           >
             {loading ? (
               <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />
             ) : (
-              <Brain className="h-4 w-4 " />
+              <Brain className="h-4 w-4" />
             )}
             <span>{loading ? 'Processing...' : 'Generate Dual Codes'}</span>
           </button>
@@ -94,10 +251,16 @@ export const DualCodingPage: React.FC = () => {
                 </div>
                 
                 <div className="flex justify-end space-x-2 mt-4">
-                  <button className="bg-gray-100 text-gray-700 px-3 py-1 rounded text-sm hover:bg-gray-200">
+                  <button 
+                    onClick={() => handleSearch()} // Re-search for alternatives
+                    className="bg-gray-100 text-gray-700 px-3 py-1 rounded text-sm hover:bg-gray-200"
+                  >
                     Suggest Alternative
                   </button>
-                  <button className="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700">
+                  <button 
+                    onClick={() => saveMapping(code.namasteCode, code.namasteDescription, code.icdCode, code.icdDescription)}
+                    className="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700"
+                  >
                     Save Mapping
                   </button>
                 </div>
