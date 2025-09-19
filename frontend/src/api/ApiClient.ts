@@ -48,6 +48,18 @@ export async function getJSON(path: string) {
 
 export async function postAudio(file: File): Promise<{ transcript: string }> {
   console.debug(`POST audio to ${API_BASE}/api/stt`);
+  
+  // Validate file type
+  if (!file.type.startsWith('audio/')) {
+    throw new Error('File must be an audio file');
+  }
+  
+  // Check file size (limit to 25MB for ElevenLabs)
+  const maxSize = 25 * 1024 * 1024; // 25MB
+  if (file.size > maxSize) {
+    throw new Error('Audio file too large. Maximum size is 25MB.');
+  }
+  
   const form = new FormData();
   form.append("file", file, file.name);
   
@@ -77,12 +89,35 @@ export async function postTTS(text: string, voice?: string): Promise<{ audio_bas
 // Helper function to convert base64 audio to playable audio
 export function playAudioFromBase64(base64Audio: string): void {
   try {
-    const audioBytes = atob(base64Audio);
-    const audioBlob = new Blob([audioBytes], { type: 'audio/mpeg' });
+    // Convert base64 to binary
+    const binaryString = atob(base64Audio);
+    const bytes = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+    
+    // Create audio blob
+    const audioBlob = new Blob([bytes], { type: 'audio/mpeg' });
     const audioUrl = URL.createObjectURL(audioBlob);
+    
+    // Create and play audio
     const audio = new Audio(audioUrl);
-    audio.play().catch(console.error);
+    
+    // Clean up object URL after playing
+    audio.onended = () => {
+      URL.revokeObjectURL(audioUrl);
+    };
+    
+    audio.onerror = (error) => {
+      console.error('Audio playback error:', error);
+      URL.revokeObjectURL(audioUrl);
+    };
+    
+    audio.play().catch((error) => {
+      console.error('Error playing audio:', error);
+      URL.revokeObjectURL(audioUrl);
+    });
   } catch (error) {
-    console.error('Error playing audio:', error);
+    console.error('Error processing base64 audio:', error);
   }
 }

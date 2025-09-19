@@ -2,6 +2,7 @@
 import os
 import json
 import time
+import base64
 import logging
 from typing import Optional, List, Dict, Any
 from fastapi import FastAPI, UploadFile, File, HTTPException, BackgroundTasks
@@ -88,14 +89,28 @@ def login(user: Dict[str, str]):
 # STT endpoint - accepts audio, returns transcript (uses ElevenLabs)
 @app.post("/api/stt")
 async def stt(file: UploadFile = File(...)):
-    # Save file buffer to temp file
-    contents = await file.read()
+    """
+    Speech-to-Text endpoint using ElevenLabs API.
+    Accepts audio file and returns transcript.
+    """
+    if not ELEVEN_KEY:
+        raise HTTPException(status_code=500, detail="ElevenLabs API key not configured")
+    
+    # Validate file type
+    if not file.content_type or not file.content_type.startswith('audio/'):
+        raise HTTPException(status_code=400, detail="File must be an audio file")
+    
     try:
+        contents = await file.read()
+        logger.info(f"Processing audio file: {file.filename}, size: {len(contents)} bytes")
+        
         transcript = elevenlabs_stt(audio_bytes=contents, api_key=ELEVEN_KEY)
+        logger.info(f"STT successful: {transcript}")
+        
         return {"transcript": transcript}
     except Exception as e:
         logger.exception("STT failed")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=f"STT failed: {str(e)}")
 
 # TTS endpoint - returns audio bytes
 class TTSRequest(BaseModel):
@@ -104,12 +119,29 @@ class TTSRequest(BaseModel):
 
 @app.post("/api/tts")
 def tts(req: TTSRequest):
+    """
+    Text-to-Speech endpoint using ElevenLabs API.
+    Accepts text and returns base64-encoded audio.
+    """
+    if not ELEVEN_KEY:
+        raise HTTPException(status_code=500, detail="ElevenLabs API key not configured")
+    
+    if not req.text or not req.text.strip():
+        raise HTTPException(status_code=400, detail="Text cannot be empty")
+    
     try:
+        logger.info(f"Processing TTS request: {req.text[:50]}...")
+        
         audio_bytes = elevenlabs_tts(text=req.text, api_key=ELEVEN_KEY, voice=req.voice)
-        return {"audio_base64": audio_bytes.decode('latin1')}  # client should decode; or serve as streaming endpoint
+        logger.info(f"TTS successful, generated {len(audio_bytes)} bytes")
+        
+        # Convert to base64 for JSON response
+        audio_base64 = base64.b64encode(audio_bytes).decode('utf-8')
+        
+        return {"audio_base64": audio_base64}
     except Exception as e:
         logger.exception("TTS failed")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=f"TTS failed: {str(e)}")
 
 # Embed endpoint - return vector (raw list)
 class TextIn(BaseModel):
