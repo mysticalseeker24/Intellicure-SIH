@@ -9,11 +9,15 @@ import sys
 import requests
 import base64
 import json
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Add the app directory to the path
 sys.path.append(os.path.join(os.path.dirname(__file__), 'app'))
 
-from elevenlabs import elevenlabs_stt, elevenlabs_tts
+from app.elevenlabs import elevenlabs_stt, elevenlabs_tts
 
 def test_tts():
     """Test Text-to-Speech functionality"""

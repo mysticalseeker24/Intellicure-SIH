@@ -8,6 +8,10 @@ from typing import Optional, List, Dict, Any
 from fastapi import FastAPI, UploadFile, File, HTTPException, BackgroundTasks
 from pydantic import BaseModel
 from sqlmodel import Session, select
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 from .db import init_db, get_engine, create_db_and_tables
 from .models import Patient, ConditionRecord, ConceptMapRecord, AuditEvent
 from .ml_utils import EmbeddingService
@@ -37,6 +41,11 @@ FAISS_INDEX_PATH = os.environ.get("FAISS_INDEX_PATH", "./data/faiss_icd_hnsw.idx
 FAISS_META_PATH = os.environ.get("FAISS_META_PATH", "./data/icd_meta.npy")
 ICD_CORPUS_CSV = os.environ.get("ICD_CORPUS_CSV", "./data/icd_corpus.csv")
 ELEVEN_KEY = os.environ.get("ELEVEN_API_KEY", "")
+
+# Log configuration for debugging
+logger.info(f"Database URL: {DATABASE_URL}")
+logger.info(f"Model directory: {MODEL_DIR}")
+logger.info(f"ElevenLabs API key configured: {bool(ELEVEN_KEY)}")
 
 engine = get_engine(DATABASE_URL)
 create_db_and_tables(engine)

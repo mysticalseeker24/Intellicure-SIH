@@ -96,27 +96,36 @@ git clone <repository-url>
 cd SIH
 ```
 
-### **2. Backend Setup**
+### **2. Environment Configuration**
+```bash
+# Copy the example environment file
+cp .env.example .env
+
+# Edit .env file and add your ElevenLabs API key
+# Get your API key from: https://elevenlabs.io
+# Set: ELEVEN_API_KEY=your_actual_api_key_here
+```
+
+### **3. Backend Setup**
 ```bash
 cd backend
 pip install -r requirements.txt
 
-# Set ElevenLabs API key
-$env:ELEVEN_API_KEY="your_api_key_here"  # Windows PowerShell
-# export ELEVEN_API_KEY="your_api_key_here"  # Linux/Mac
+# Test ElevenLabs integration (optional)
+python test_elevenlabs.py
 
 # Start backend server
 uvicorn app.main:app --host 0.0.0.0 --port 8010 --reload
 ```
 
-### **3. Frontend Setup**
+### **4. Frontend Setup**
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-### **4. Access the Application**
+### **5. Access the Application**
 - **Frontend**: http://localhost:5173
 - **Backend API**: http://localhost:8010
 - **API Docs**: http://localhost:8010/docs

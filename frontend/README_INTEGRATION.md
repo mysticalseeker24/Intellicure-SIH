@@ -13,6 +13,11 @@
    ```
    VITE_API_BASE_URL=http://localhost:8010
    ```
+   
+   **Note:** Make sure the backend `.env` file has the ElevenLabs API key configured:
+   ```
+   ELEVEN_API_KEY=your_elevenlabs_api_key_here
+   ```
 
 3. **Start development server:**
    ```bash
@@ -22,7 +27,7 @@
 4. **Start backend server:**
    ```bash
    cd ../backend
-   $env:ELEVEN_API_KEY="your_api_key_here"
+   # Make sure .env file has ELEVEN_API_KEY configured
    uvicorn app.main:app --host 0.0.0.0 --port 8010 --reload
    ```
 
